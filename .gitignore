@@ -43,3 +43,6 @@ fabric.properties
 **/.settings/
 **/bin
 codealike.json
+
+# ignore already checked in properties file to ensure that credentials are safe
+twitter4j.properties
