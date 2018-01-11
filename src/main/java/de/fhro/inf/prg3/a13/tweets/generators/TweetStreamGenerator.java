@@ -5,10 +5,14 @@ import de.fhro.inf.prg3.a13.model.Tweet;
 import java.util.stream.Stream;
 
 /**
+ * Generator for a Stream of tweets
  * @author Peter Kurfer
- * Created on 1/11/18.
  */
 public interface TweetStreamGenerator {
 
+    /**
+     * Get a new Stream of tweets
+     * @return Stream of tweets - length may be unknown
+     */
     Stream<Tweet> getTweetStream();
 }
