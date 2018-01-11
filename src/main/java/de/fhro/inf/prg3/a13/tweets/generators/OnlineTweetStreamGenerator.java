@@ -15,18 +15,19 @@ import java.util.stream.StreamSupport;
  * @author Peter Kurfer
  * Created on 1/11/18.
  */
-public class OnlineTweetGenerator {
+public class OnlineTweetStreamGenerator implements TweetStreamGenerator {
 
     private static final String TWITTER_SCREEN_NAME = "realDonaldTrump";
     private static final int PAGE_SIZE = 200;
 
     private final Twitter twitter;
 
-    public OnlineTweetGenerator() {
+    public OnlineTweetStreamGenerator() {
         twitter = TwitterFactory.getSingleton();
     }
 
-    public Stream<Tweet> getOnlineStream() {
+    @Override
+    public Stream<Tweet> getTweetStream() {
         final List<Tweet> currentTweetResult = getPageOfTweets(1);
 
         return StreamSupport.stream(Spliterators.spliteratorUnknownSize(new Iterator<Tweet>() {
