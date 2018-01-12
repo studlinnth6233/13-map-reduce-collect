@@ -1,0 +1,37 @@
+@startuml GeneratorSpec
+
+left to right direction
+
+package de.fhro.inf.prg3.a13.tweets {
+
+        +class TweetStreamFactory {
+                -{static}instance: TweetStreamFactory
+                +{static}getInstance(): TweetStreamFactory
+                +isOnlineAvailable(): boolean
+                +getTweetsStream(tweetSource: TweetSource): Stream<Tweet>
+        }
+
+        +enum TweetSource {
+                ONLINE,
+                OFFLINE
+        }
+
+        package generators {
+                +interface TweetStreamGenerator {
+                        getTweetStream(): Stream<Tweet>
+                }
+
+                +class OnlineTweetStreamGenerator implements TweetStreamGenerator {
+
+                }
+
+                +class OfflineTweetStreamGenerator implements TweetStreamGenerator {
+
+                }
+        }
+
+        TweetStreamFactory --> OnlineTweetStreamGenerator: Instantiates and returns
+        TweetStreamFactory --> OfflineTweetStreamGenerator: Instantiates and returns
+}
+
+@enduml
