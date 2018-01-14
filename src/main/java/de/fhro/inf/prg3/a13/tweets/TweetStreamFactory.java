@@ -1,19 +1,17 @@
 package de.fhro.inf.prg3.a13.tweets;
 
-import de.fhro.inf.prg3.a13.model.Tweet;
 import de.fhro.inf.prg3.a13.tweets.generators.OnlineTweetStreamGenerator;
 import de.fhro.inf.prg3.a13.tweets.generators.TweetStreamGenerator;
 import org.apache.commons.lang3.NotImplementedException;
 
 import java.io.IOException;
 import java.util.Properties;
-import java.util.stream.Stream;
 
 /**
  * Factory singleton to create tweet streams
  * @author Peter Kurfer
  */
-public class TweetStreamFactory {
+public final class TweetStreamFactory {
 
     private static final TweetStreamFactory instance = new TweetStreamFactory();
 
@@ -53,26 +51,27 @@ public class TweetStreamFactory {
     /**
      * Determine if Twitter4j is configured correctly
      */
-    public boolean isOnlineAvailable() {
+    public final boolean isOnlineAvailable() {
         return isTwitter4jConfigured;
     }
 
     /**
-     * Get a new stream of Tweets
+     * Get a new stream generator
+     * if Twitter4j is not configured the offline source is used
      * @param tweetSource indicator which source of Tweets to use
      */
-    public Stream<Tweet> getTweetsStream(TweetSource tweetSource) {
+    public final TweetStreamGenerator getStreamGenerator(TweetSource tweetSource) {
         if (tweetSource == TweetSource.ONLINE && isTwitter4jConfigured) {
-            return onlineTweetStreamGenerator.getTweetStream();
+            return onlineTweetStreamGenerator;
         }
-        /* TODO use offline source */
+        /* TODO return offline source generator */
         throw new NotImplementedException("TweetStreamFactory.getTweetsStream() is not implemented yet");
     }
 
     /**
-     * Get a new stream of Tweets from offline source
+     * Get a new stream generator from offline source
      */
-    public Stream<Tweet> getTweetsStream() {
-        return getTweetsStream(TweetSource.OFFLINE);
+    public final TweetStreamGenerator getStreamGenerator() {
+        return getStreamGenerator(TweetSource.OFFLINE);
     }
 }

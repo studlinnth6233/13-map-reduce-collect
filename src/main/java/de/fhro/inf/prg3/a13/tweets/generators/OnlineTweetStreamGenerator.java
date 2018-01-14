@@ -15,7 +15,7 @@ import java.util.stream.StreamSupport;
  * Stream generator which loads tweets live from the Twitter API
  * @author Peter Kurfer
  */
-public class OnlineTweetStreamGenerator implements TweetStreamGenerator {
+public final class OnlineTweetStreamGenerator implements TweetStreamGenerator {
 
     private static final String TWITTER_SCREEN_NAME = "realDonaldTrump";
     private static final int PAGE_SIZE = 200;
@@ -33,7 +33,7 @@ public class OnlineTweetStreamGenerator implements TweetStreamGenerator {
      * @return Stream of tweets live from the Twitter API - length is unknown as it depends on how many tweets are kept outside the archive at twitter
      */
     @Override
-    public Stream<Tweet> getTweetStream() {
+    public final Stream<Tweet> getTweetStream() {
         /* fetch initial page of tweets */
         final List<Tweet> currentTweetResult = getPageOfTweets(1);
 

@@ -1,8 +1,6 @@
-package de.fhro.inf.prg3.a13;
+package de.fhro.inf.prg3.a13.tweets;
 
 import de.fhro.inf.prg3.a13.model.Tweet;
-import de.fhro.inf.prg3.a13.tweets.TweetSource;
-import de.fhro.inf.prg3.a13.tweets.TweetStreamFactory;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
@@ -15,23 +13,24 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
+ * Test of the Tweet stream generators
  * @author Peter Kurfer
- * Created on 1/11/18.
  */
-class TwitterStreamSourceTests {
+class TwitterStreamSourceTest {
 
-    private static final Logger logger = Logger.getLogger(TwitterStreamSourceTests.class.getName());
+    private static final Logger logger = Logger.getLogger(TwitterStreamSourceTest.class.getName());
     private final TweetStreamFactory tweetStreamFactory;
 
-    TwitterStreamSourceTests() {
+    TwitterStreamSourceTest() {
         tweetStreamFactory = TweetStreamFactory.getInstance();
     }
 
     @Test
-    void testGetTweetsOnlineWithLimit() {
+    void getTweetsOnlineWithLimit() {
         if (!tweetStreamFactory.isOnlineAvailable())
             logger.info("Skipping online test 'testGetTweetsOnlineWithLimit' because Twitter4j is not configured");
-        Stream<Tweet> tweetStream = tweetStreamFactory.getTweetsStream(TweetSource.ONLINE);
+        Stream<Tweet> tweetStream = tweetStreamFactory.getStreamGenerator(TweetSource.ONLINE)
+                .getTweetStream();
 
         List<String> tweetTexts = tweetStream.limit(300)
                 .map(Tweet::getText)
@@ -45,11 +44,12 @@ class TwitterStreamSourceTests {
     }
 
     @Test
-    void testGetTweetsOnlineWithoutLimit() {
+    void getTweetsOnlineWithoutLimit() {
         if (!tweetStreamFactory.isOnlineAvailable())
             logger.info("Skipping online test 'testGetTweetsOnlineWithoutLimit' because Twitter4j is not configured");
         assertTimeout(Duration.ofMinutes(5), () -> {
-            List<Tweet> tweets = tweetStreamFactory.getTweetsStream(TweetSource.ONLINE)
+            List<Tweet> tweets = tweetStreamFactory.getStreamGenerator(TweetSource.ONLINE)
+                    .getTweetStream()
                     .collect(Collectors.toList());
 
             assertNotNull(tweets);
@@ -58,8 +58,9 @@ class TwitterStreamSourceTests {
     }
 
     @Test
-    void testGetTweetsOffline() {
-        List<String> tweets = tweetStreamFactory.getTweetsStream()
+    void getTweetsOffline() {
+        List<String> tweets = tweetStreamFactory.getStreamGenerator()
+                .getTweetStream()
                 .map(Tweet::getText)
                 .collect(Collectors.toList());
 
