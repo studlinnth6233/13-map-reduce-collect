@@ -1,7 +1,5 @@
 @startuml GeneratorSpec
 
-left to right direction
-
 package de.fhro.inf.prg3.a13.tweets {
 
         +class TweetStreamFactory {
