@@ -11,11 +11,11 @@ The concepts that are specifically topic of this assignment are:
 
 We'll use _Map-Reduce_ to implement the classical _word count_ example.
 As sample data the repository contains about 3.000 tweets of Donald Trump we will analyze in this assignment.
-As an alternative the assignment also contains a generator which uses the Twitter API fo fetch the tweets live.
+As an alternative the assignment also contains a generator which uses the Twitter API to fetch the tweets live.
 To be able to use this generator you have to do some [additional configuration](#using-the-twitter-api).
 
 After we analyzed which words Donald Trump uses most in his tweets we'll have a look which tweets are sent from which device.
-A clever data scientist discovered that most of angrier tweets came from Android where the nicer ones were written with an iPhone ([first article](http://varianceexplained.org/r/trump-tweets/) and [follow up article](http://varianceexplained.org/r/trump-followup/)).
+A clever data scientist discovered that most of the angrier tweets came from Android where the nicer ones were written with an iPhone ([first article](http://varianceexplained.org/r/trump-tweets/) and [follow up article](http://varianceexplained.org/r/trump-followup/)).
 We will have a look if we can use Java's `Stream`s to group the tweets by the kind of client which was used to create them.
 
 ## Setup
@@ -44,7 +44,7 @@ Gson gson = new Gson();
 Tweet[] tweets = gson.fromJson(reader, Tweet[].class);
 ```
 
-Where `reader` is an instance of the interface `Reader`.
+Where `reader` is an instance of the class `Reader`.
 To access files from the `resources` folder implement something like in this snippet:
 
 ```java
@@ -65,7 +65,7 @@ And those who want a more functional way may be interested in this [Gist](https:
 
 ## Collecting
 
-Until now `Stream`s are nice to have but printing all results to the command line with the terminator `forEach(...)` is not the really practicable.
+Until now `Stream`s are nice to have but printing all results to the command line with the terminator `forEach(...)` is not really practicable.
 
 To be able to process the data we need to `collect` them e.g. in a `List<>` or a `Set<>` or any other _Collection_.
 
@@ -79,7 +79,7 @@ The following UML contains the signatures of the methods to be implemented in th
 Don't worry, the method stubs are given already!
 The UML is only meant to keep the signatures in mind while you're reading the spec.
 
-The first two tasks are the implementation of the methods
+The first two tasks are the implementation of the methods:
 
 * `calculateSourceAppStats`
 * `calculateTweetsBySourceApp`
@@ -104,13 +104,15 @@ Every `Tweet` instance has two methods to access the `source`:
 
 The first one returns a string like this: `<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>`.
 The second one extracts the actual name of the app `Twitter for iPhone`.
-It does not matter for the assignment which one you chose but the second is a little bit prettier when the result is printed.
+It does not matter for the assignment which one you chose but the second one is a little bit prettier when the result is printed.
 
 _Side note: the task is thought to be solved with `collect` but it's also possible to do it with `reduce`!_
 
 ### `calculateTweetsBySourceApp`
 
 This method is very similar to `calculateSourceAppStats` but instead of just counting the tweets it collects them as a `Set<Tweet>` for further analysis.
+
+Where the method `calculateSourceAppStats` was very easy to implement with SQL, this method is impossible to implement in SQL because SQL does not define a map of lists (i.e. a tuple of tuples)!
 
 _Side note: the task is thought to be solved with `collect` but it's also possible to do it with `reduce`!_
 
@@ -122,4 +124,41 @@ As the name already indicates the algorithm consists of two steps:
 * _Map_ - transform the data in parallel
 * _Reduce_ - retrieve all interim results and aggregate them
 
+If you're looking for examples of _Map-Reduce_, the first hit will most likely be the word-count problem.
+It's relatively simple to implement as there's not much transformation required and it demonstrates the concept very well.
+
+We want to analyze which words are the most common in the given tweets.
+The following flow chart is meant as orientation how to implement the _Map-Reduce_ algorithm.
+
+![Map-Reduce flow chart](./assets/images/MapReduce-WordCount.svg)
+
+The text of the tweet can be split like this:
+
+```java
+String[] split = "Hello World".split("( )+");
+```
+
+The `reduce` method requires a so called accumulator.
+For this method, an instance of `HashMap<>` or `LinkedHashMap<>` seams to be a good idea.
+The next part is the reduction step and should be an instance of `BiFunction<>`.
+It's a function where the accumulator and a single value is passed in and the accumulator is returned after the value is processed (e.g. inserted to a list).
+The last part is a combiner.
+It's meant to combine two accumulator values but you won't need it this time.
+
+_Debugging hint: the latest IntelliJ Idea ships with the plugin [Java Stream Debugger](https://plugins.jetbrains.com/plugin/9696-java-stream-debugger). The plugin visualizes how the stream is transformed step by step (including the actual data). That's very helpful if something is happening you don't expect to happen!_
+
+_Another hint: the given 3225 tweets are a little bit too much to debug your `Stream` if something is going wrong. It may help to `limit` the `Stream` you're passing to the method `calculateWordCount` to e.g. 200 elements!_
+
+_Last but not least: the Map-Reduce algorithm is a little bit tricky when you implement it for the first time. If you're stuck, Google can help you!_
+
+There are already some unit tests but it might be a good idea to extend the test suite.
+
 ## Using the Twitter API
+
+To be able to use Twitter4j you're required to configure it by setting OAuth consumer key, consumer secret, access token and access token secret in the file `twitter4j.properties`.
+
+To get these tokens you need to register a [Twitter app](https://apps.twitter.com).
+Then you have to fill in some basic information about the "app" you're creating.
+
+After the registration of your new app you'll be able to retrieve the required information.
+The `twitter4j.properties` is already existing, just replace the `<dummy>` strings with your actual keys and secrets and you should be able to fetch the tweets live from the API.

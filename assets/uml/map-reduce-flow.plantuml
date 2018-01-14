@@ -1,0 +1,9 @@
+@startuml MapReduce-WordCount
+start
+:Get the text of the tweet;
+:Split the text at every whitespace;
+:Use `flatMap` to map the resulting arrays to a single stream of Strings;
+:Optional: use `filter` to remove words that are excluded by the list of `stopWords`;
+:Reduce the interim results to a Map<String, Integer>;
+:Optional: remove words that occure less than 10 times;
+@enduml
