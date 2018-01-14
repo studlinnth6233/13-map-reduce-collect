@@ -1,4 +1,4 @@
-CREATE TABLE public.tweets
+CREATE TABLE tweets
 (
     id BIGINT PRIMARY KEY NOT NULL,
     text VARCHAR(140) NOT NULL,
@@ -6,7 +6,7 @@ CREATE TABLE public.tweets
     lang VARCHAR(10) NOT NULL,
     retweetCount INT NOT NULL
 );
-CREATE UNIQUE INDEX tweets_id_uindex ON public.tweets (id);
+CREATE UNIQUE INDEX tweets_id_uindex ON tweets (id);
 
 INSERT INTO tweets (id, text, source, lang, retweetcount) VALUES (879317636164841474, 'The reason that President Obama did NOTHING about Russia after being notified by the CIA of meddling is that he expected Clinton would win..', '<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>', 'en', 24815);
 INSERT INTO tweets (id, text, source, lang, retweetcount) VALUES (898988632551370753, 'Looks like many anti-police agitators in Boston. Police are looking tough and smart! Thank you.', '<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>', 'en', 25123);

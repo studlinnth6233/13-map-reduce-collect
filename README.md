@@ -14,7 +14,6 @@ As sample data the repository contains about 3.000 tweets of Donald Trump we wil
 As an alternative the assignment also contains a generator which uses the Twitter API to fetch the tweets live.
 To be able to use this generator you have to do some [additional configuration](#using-the-twitter-api).
 
-After we analyzed which words Donald Trump uses most in his tweets we'll have a look which tweets are sent from which device.
 A clever data scientist discovered that most of the angrier tweets came from Android where the nicer ones were written with an iPhone ([first article](http://varianceexplained.org/r/trump-tweets/) and [follow up article](http://varianceexplained.org/r/trump-followup/)).
 We will have a look if we can use Java's `Stream`s to group the tweets by the kind of client which was used to create them.
 
@@ -44,7 +43,7 @@ Gson gson = new Gson();
 Tweet[] tweets = gson.fromJson(reader, Tweet[].class);
 ```
 
-Where `reader` is an instance of the class `Reader`.
+Where `reader` is an instance of the abstract class `Reader`.
 To access files from the `resources` folder implement something like in this snippet:
 
 ```java
@@ -86,7 +85,7 @@ The first two tasks are the implementation of the methods:
 
 ### `calculateSourceAppStats`
 
-The method groups the tweets by the app they were created with and counts how many tweets were created with which app.
+This method groups the tweets by the app they were created with and counts how many tweets were created with which app.
 In SQL you would write it like this:
 
 ```sql
@@ -94,8 +93,8 @@ SELECT source, count(*) FROM tweets
 GROUP BY source
 ```
 
-If you want to try it on your own: the repository contains a SQL script to create a table and insert all the tweets to it.
-Note that the script is only tested on PostgreSQL so you might need to adopt it for another SQL dialect!
+If you want to try it on your own: the repository contains a SQL script that creates a `tweet` table and insert all the tweets to it.
+The script has been tested on MSSQL and PostgreSQL but if you want to use it on MySQL or MariaDB some additional work might be necessary.
 
 Every `Tweet` instance has two methods to access the `source`:
 
@@ -104,7 +103,7 @@ Every `Tweet` instance has two methods to access the `source`:
 
 The first one returns a string like this: `<a href="http://twitter.com/download/iphone" rel="nofollow">Twitter for iPhone</a>`.
 The second one extracts the actual name of the app `Twitter for iPhone`.
-It does not matter for the assignment which one you chose but the second one is a little bit prettier when the result is printed.
+It does not matter for the assignment which one you choose but the second one is a little bit prettier when the result is printed.
 
 _Side note: the task is thought to be solved with `collect` but it's also possible to do it with `reduce`!_
 
@@ -124,7 +123,7 @@ As the name already indicates the algorithm consists of two steps:
 * _Map_ - transform the data in parallel
 * _Reduce_ - retrieve all interim results and aggregate them
 
-If you're looking for examples of _Map-Reduce_, the first hit will most likely be the word-count problem.
+If you're looking for examples of _Map-Reduce_, the first hit will most likely be the word count problem.
 It's relatively simple to implement as there's not much transformation required and it demonstrates the concept very well.
 
 We want to analyze which words are the most common in the given tweets.
