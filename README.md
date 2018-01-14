@@ -155,10 +155,19 @@ There are already some unit tests but it might be a good idea to extend the test
 
 ## Using the Twitter API
 
-To be able to use Twitter4j you're required to configure it by setting OAuth consumer key, consumer secret, access token and access token secret in the file `twitter4j.properties`.
+To be able to use Twitter4j you're required to configure it by setting OAuth consumer key, consumer secret, access token and access token secret in a file called `twitter4j.properties` that is in the root of your `resources` folder (right next to the files `stopwords.txt` and `trump_tweets.json`).
+The file should have the following structure:
+
+```properties
+debug=true
+oauth.consumerKey=<dummy>
+oauth.consumerSecret=<dummy>
+oauth.accessToken=<dummy>
+oauth.accessTokenSecret=<dummy>
+```
 
 To get these tokens you need to register a [Twitter app](https://apps.twitter.com).
 Then you have to fill in some basic information about the "app" you're creating.
 
 After the registration of your new app you'll be able to retrieve the required information.
-The `twitter4j.properties` is already existing, just replace the `<dummy>` strings with your actual keys and secrets and you should be able to fetch the tweets live from the API.
+Copy the given structure to a new file `twitter4j.properties` and replace the `<dummy>` strings with your actual keys and secrets and you should be able to fetch the tweets live from the API.
