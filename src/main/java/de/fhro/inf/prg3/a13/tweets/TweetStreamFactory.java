@@ -33,7 +33,7 @@ public final class TweetStreamFactory {
                     .map(twitter4jProps::getProperty)
                     .noneMatch(value -> value.equals("<dummy>"));
 
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
             configured = false;
         } finally {
             isTwitter4jConfigured = configured;
