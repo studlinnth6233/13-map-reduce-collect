@@ -1,81 +1,94 @@
 package de.thro.inf.prg3.a13.tweets;
 
 import de.thro.inf.prg3.a13.model.Tweet;
-import de.thro.inf.prg3.a13.utils.PrintUtils;
-import de.thro.inf.prg3.a13.utils.ResourceUtils;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.logging.Logger;
-import java.util.stream.Stream;
 
+import static de.thro.inf.prg3.a13.utils.PrintUtils.iterableToString;
+import static de.thro.inf.prg3.a13.utils.PrintUtils.mapToString;
+import static de.thro.inf.prg3.a13.utils.ResourceUtils.loadStopWordsFunctional;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /**
- * Test cases for TrumpTweetStats
  * @author Peter Kurfer
+ * Created on 1/14/18.
  */
 class TrumpTweetStatsTest {
 
-    private static final Logger logger = Logger.getLogger(TrumpTweetStatsTest.class.getName());
+	private static final Logger logger = Logger.getLogger(TrumpTweetStatsTest.class.getName());
 
-    private final TweetStreamFactory tweetStreamFactory;
-    private final List<String> stopWords;
+	private final TweetStreamFactory tweetStreamFactory;
+	private final Set<String> stopWords;
 
-    TrumpTweetStatsTest() {
-        /* get singleton instance of generator factory */
-        this.tweetStreamFactory = TweetStreamFactory.getInstance();
-        /* load stop words */
-        this.stopWords = ResourceUtils.loadStopWords();
-    }
+	TrumpTweetStatsTest() {
+		this.tweetStreamFactory = TweetStreamFactory.getInstance();
+		this.stopWords = loadStopWordsFunctional();
+	}
 
-    /**
-     * Test of `calculateTweetsBySourceApp`
-     * if you have configured Twitter4j you can change the ValueSource annotation to @ValueSource(strings = {"ONLINE", "OFFLINE"}) to include online tests
-     */
-    @ParameterizedTest
-    @ValueSource(strings = {"OFFLINE"})
-    void calculateTweetsBySourceApp(String tweetSourceName) {
-        TweetSource tweetSource = TweetSource.valueOf(tweetSourceName);
+	@ParameterizedTest
+	@ValueSource(strings = {"ONLINE", "OFFLINE"})
+	void getTweetsBySourceApp(String tweetSourceName) {
+		var tweetSource = TweetSource.valueOf(tweetSourceName);
 
-        Stream<Tweet> tweetStream = tweetStreamFactory.getStreamGenerator(tweetSource).getTweetStream();
-        Map<String, Set<Tweet>> tweetsBySourceApp = TrumpTweetStats.calculateTweetsBySourceApp(tweetStream);
+		var stats = new TrumpTweetStats(tweetStreamFactory.getStreamGenerator(tweetSource), stopWords);
+		var tweetsBySourceApp = stats.getTweetsBySourceApp();
 
-        assertNotEquals(0, tweetsBySourceApp.keySet().size());
-        logger.info(PrintUtils.mapToString(tweetsBySourceApp, Function.identity(), set -> PrintUtils.iterableToString(set, Tweet::getText)));
-    }
+		assertNotEquals(0, tweetsBySourceApp.keySet().size());
+		logger.info(mapToString(tweetsBySourceApp, Function.identity(), set -> iterableToString(set, Tweet::getText)));
+	}
 
-    /**
-     * Test of `calculateWordCount`
-     * if you have configured Twitter4j you can change the ValueSource annotation to @ValueSource(strings = {"ONLINE", "OFFLINE"}) to include online tests
-     */
-    @ParameterizedTest
-    @ValueSource(strings = {"OFFLINE"})
-    void getWordCount(String tweetSourceName) {
-        TweetSource tweetSource = TweetSource.valueOf(tweetSourceName);
+	@ParameterizedTest
+	@ValueSource(strings = {"ONLINE", "OFFLINE"})
+	void getWordCount(String tweetSourceName) {
+		var tweetSource = TweetSource.valueOf(tweetSourceName);
 
-        Stream<Tweet> tweetStream = tweetStreamFactory.getStreamGenerator(tweetSource).getTweetStream();
-        Map<String, Integer> wordCount = TrumpTweetStats.calculateWordCount(tweetStream, stopWords);
-        assertNotEquals(0, wordCount.keySet().size());
-        logger.info(PrintUtils.mapToString(wordCount));
-    }
+		var stats = new TrumpTweetStats(tweetStreamFactory.getStreamGenerator(tweetSource), stopWords);
 
-    /**
-     * Test of `calculateSourceAppStats`
-     * if you have configured Twitter4j you can change the ValueSource annotation to @ValueSource(strings = {"ONLINE", "OFFLINE"}) to include online tests
-     */
-    @ParameterizedTest
-    @ValueSource(strings = {"OFFLINE"})
-    void calculateSourceAppStats(String tweetSourceName) {
-        TweetSource tweetSource = TweetSource.valueOf(tweetSourceName);
+		var wordCount = stats.getWordCount();
+		assertNotEquals(0, wordCount.keySet().size());
+		logger.info(mapToString(wordCount));
+	}
 
-        Stream<Tweet> tweetStream = tweetStreamFactory.getStreamGenerator(tweetSource).getTweetStream();
-        Map<String, Long> sourceAppStats = TrumpTweetStats.calculateSourceAppStats(tweetStream);
-        assertNotEquals(0, sourceAppStats.keySet().size());
-        logger.info(PrintUtils.mapToString(sourceAppStats));
-    }
+	@ParameterizedTest
+	@ValueSource(strings = {"ONLINE", "OFFLINE"})
+	void getSourceAppStats(String tweetSourceName) {
+		var tweetSource = TweetSource.valueOf(tweetSourceName);
+
+		var stats = new TrumpTweetStats(tweetStreamFactory.getStreamGenerator(tweetSource), stopWords);
+
+		var sourceAppStats = stats.getSourceAppStats();
+		assertNotEquals(0, sourceAppStats.keySet().size());
+		logger.info(mapToString(sourceAppStats));
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {"ONLINE", "OFFLINE"})
+	void calculateSourceAppStatsWithReduce(String tweetSourceName) {
+		var tweetSource = TweetSource.valueOf(tweetSourceName);
+		var generator = tweetStreamFactory.getStreamGenerator(tweetSource);
+		var withoutReduce = TrumpTweetStats.calculateSourceAppStats(generator.getTweetStream());
+		var withReduce = TrumpTweetStats.calculateSourceAppStatsWithReduce(generator.getTweetStream());
+
+		assertEquals(withoutReduce.keySet().size(), withReduce.keySet().size());
+
+		assertEquals(withoutReduce.keySet(), withReduce.keySet());
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {"ONLINE", "OFFLINE"})
+	void calculateTweetsBySourceAppWithReduce(String tweetSourceName) {
+		var tweetSource = TweetSource.valueOf(tweetSourceName);
+		var generator = tweetStreamFactory.getStreamGenerator(tweetSource);
+
+		var withoutReduce = TrumpTweetStats.calculateTweetsBySourceApp(generator.getTweetStream());
+		var withReduce = TrumpTweetStats.calculateTweetsBySourceAppWithReduce(generator.getTweetStream());
+
+		assertEquals(withoutReduce.keySet(), withReduce.keySet());
+
+	}
 }
