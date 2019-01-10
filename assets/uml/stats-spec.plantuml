@@ -1,6 +1,6 @@
 @startuml TrumpTweetStats
 
-package de.fhro.inf.prg3.a13.tweets {
+package de.thro.inf.prg3.a13.tweets {
         +class TrumpTweetStats {
                 +{static}calculateSourceAppStats(tweetStream: Stream<Tweet>): Map<String, Long>
                 +{static}calculateTweetsBySourceApp(tweetStream: Stream<Tweet>): Map<String, Set<Tweet>>
