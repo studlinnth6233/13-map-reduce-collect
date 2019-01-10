@@ -1,4 +1,4 @@
-package de.fhro.inf.prg3.a13.utils;
+package de.thro.inf.prg3.a13.utils;
 
 import java.util.LinkedList;
 import java.util.List;

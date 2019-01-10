@@ -1,6 +1,6 @@
-package de.fhro.inf.prg3.a13.tweets;
+package de.thro.inf.prg3.a13.tweets;
 
-import de.fhro.inf.prg3.a13.model.Tweet;
+import de.thro.inf.prg3.a13.model.Tweet;
 import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.List;

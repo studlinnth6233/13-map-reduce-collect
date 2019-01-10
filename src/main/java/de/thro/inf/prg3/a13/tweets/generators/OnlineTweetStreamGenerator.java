@@ -1,6 +1,6 @@
-package de.fhro.inf.prg3.a13.tweets.generators;
+package de.thro.inf.prg3.a13.tweets.generators;
 
-import de.fhro.inf.prg3.a13.model.Tweet;
+import de.thro.inf.prg3.a13.model.Tweet;
 import twitter4j.Paging;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;

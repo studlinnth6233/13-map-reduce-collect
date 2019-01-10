@@ -1,6 +1,8 @@
-package de.fhro.inf.prg3.a13.tweets;
+package de.thro.inf.prg3.a13.tweets;
 
-import de.fhro.inf.prg3.a13.model.Tweet;
+import de.thro.inf.prg3.a13.model.Tweet;
+import de.thro.inf.prg3.a13.utils.PrintUtils;
+import de.thro.inf.prg3.a13.utils.ResourceUtils;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -11,9 +13,6 @@ import java.util.function.Function;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
-import static de.fhro.inf.prg3.a13.utils.PrintUtils.iterableToString;
-import static de.fhro.inf.prg3.a13.utils.PrintUtils.mapToString;
-import static de.fhro.inf.prg3.a13.utils.ResourceUtils.loadStopWords;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /**
@@ -31,7 +30,7 @@ class TrumpTweetStatsTest {
         /* get singleton instance of generator factory */
         this.tweetStreamFactory = TweetStreamFactory.getInstance();
         /* load stop words */
-        this.stopWords = loadStopWords();
+        this.stopWords = ResourceUtils.loadStopWords();
     }
 
     /**
@@ -47,7 +46,7 @@ class TrumpTweetStatsTest {
         Map<String, Set<Tweet>> tweetsBySourceApp = TrumpTweetStats.calculateTweetsBySourceApp(tweetStream);
 
         assertNotEquals(0, tweetsBySourceApp.keySet().size());
-        logger.info(mapToString(tweetsBySourceApp, Function.identity(), set -> iterableToString(set, Tweet::getText)));
+        logger.info(PrintUtils.mapToString(tweetsBySourceApp, Function.identity(), set -> PrintUtils.iterableToString(set, Tweet::getText)));
     }
 
     /**
@@ -62,7 +61,7 @@ class TrumpTweetStatsTest {
         Stream<Tweet> tweetStream = tweetStreamFactory.getStreamGenerator(tweetSource).getTweetStream();
         Map<String, Integer> wordCount = TrumpTweetStats.calculateWordCount(tweetStream, stopWords);
         assertNotEquals(0, wordCount.keySet().size());
-        logger.info(mapToString(wordCount));
+        logger.info(PrintUtils.mapToString(wordCount));
     }
 
     /**
@@ -77,6 +76,6 @@ class TrumpTweetStatsTest {
         Stream<Tweet> tweetStream = tweetStreamFactory.getStreamGenerator(tweetSource).getTweetStream();
         Map<String, Long> sourceAppStats = TrumpTweetStats.calculateSourceAppStats(tweetStream);
         assertNotEquals(0, sourceAppStats.keySet().size());
-        logger.info(mapToString(sourceAppStats));
+        logger.info(PrintUtils.mapToString(sourceAppStats));
     }
 }

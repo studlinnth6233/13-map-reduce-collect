@@ -1,7 +1,7 @@
-package de.fhro.inf.prg3.a13.tweets;
+package de.thro.inf.prg3.a13.tweets;
 
-import de.fhro.inf.prg3.a13.tweets.generators.OnlineTweetStreamGenerator;
-import de.fhro.inf.prg3.a13.tweets.generators.TweetStreamGenerator;
+import de.thro.inf.prg3.a13.tweets.generators.OnlineTweetStreamGenerator;
+import de.thro.inf.prg3.a13.tweets.generators.TweetStreamGenerator;
 import org.apache.commons.lang3.NotImplementedException;
 
 import java.io.IOException;
