@@ -1,4 +1,4 @@
-_This is an assignment to the class [Programmieren 3](https://hsro-inf-prg3.github.io) at the [Technical University of Applied Sciences Rosenheim](https://www.th-rosenheim.de)._
+_This is an assignment to the class [Advanced Programming](https://hsro-inf-fpk.github.io) at the [University of Applied Sciences Rosenheim](http://www.th-rosenheim.de)._
 
 # Assignment 13: Map-Reduce and Collect
 
@@ -46,7 +46,7 @@ Tweet[] tweets = gson.fromJson(reader, Tweet[].class);
 ```
 
 Where `reader` is an instance of the abstract class `Reader`.
-To access files from the `resources` folder, use the `<Class class="getResourceAsStream` method:
+To access files from the `resources` folder, use the `Class getResourceAsStream` method:
 
 ```java
 getClass().getResourceAsStream("/path/to/trump_tweets.json");
