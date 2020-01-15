@@ -1,13 +1,15 @@
-plugins {
+plugins
+{
     id 'java'
     id 'application'
     id "com.github.ben-manes.versions" version "0.20.0"
 }
 
-sourceCompatibility = JavaVersion.VERSION_11
-targetCompatibility = JavaVersion.VERSION_11
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
-repositories {
+repositories
+{
     mavenLocal()
     mavenCentral()
     jcenter()
@@ -15,7 +17,8 @@ repositories {
 
 mainClassName = 'App'
 
-dependencies {
+dependencies
+{
     /* Commons Lang3 */
     compile "org.apache.commons:commons-lang3:$commons_lang_version"
 
@@ -33,9 +36,12 @@ dependencies {
     testRuntime("org.apache.logging.log4j:log4j-jul:${log4j_version}")
 }
 
-test {
+test
+{
     useJUnitPlatform()
-    testLogging {
+
+	testLogging
+	{
         events "passed", "skipped", "failed"
 
     }

@@ -6,13 +6,15 @@ import java.util.stream.Stream;
 
 /**
  * Generator for a Stream of tweets
+ *
  * @author Peter Kurfer
  */
-public interface TweetStreamGenerator {
-
-    /**
-     * Get a new Stream of tweets
-     * @return Stream of tweets - length may be unknown
-     */
-    Stream<Tweet> getTweetStream();
+public interface TweetStreamGenerator
+{
+	/**
+	 * Get a new Stream of tweets
+	 *
+	 * @return Stream of tweets - length may be unknown
+	 */
+	Stream<Tweet> getTweetStream();
 }
